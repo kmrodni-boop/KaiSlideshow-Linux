@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=KaiSlideshow
+GenericName=Slideshow Viewer
+Comment=Fullscreen image slideshow viewer
+Comment[nb]=Fullskjerm lysbildeviser for bilder
+Exec=kaislideshow %F
+TryExec=kaislideshow
+Icon=kaislideshow
+Terminal=false
+Categories=Graphics;Viewer;Photography;
+MimeType=image/jpeg;image/png;image/bmp;image/gif;image/webp;image/tiff;inode/directory;
+Keywords=slideshow;photos;images;viewer;lysbilder;bilder;
+StartupWMClass=KaiSlideshow
