@@ -19,6 +19,8 @@ SLEEP_TIMER_CHOICES = {
 
 MAX_RECENT_FOLDERS = 10
 
+DONATE_URL = "https://paypal.me/kaimarius"
+
 DEFAULT_SETTINGS = {
     "interval": "5",
     "shuffle": True,

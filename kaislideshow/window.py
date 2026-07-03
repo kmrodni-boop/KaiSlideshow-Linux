@@ -3,8 +3,8 @@
 import os
 import random
 
-from PySide6.QtCore import QPoint, QPropertyAnimation, QRect, Qt, QTimer
-from PySide6.QtGui import QImageReader, QKeyEvent, QMouseEvent, QPixmap, QWheelEvent
+from PySide6.QtCore import QPoint, QPropertyAnimation, QRect, Qt, QTimer, QUrl
+from PySide6.QtGui import QDesktopServices, QImageReader, QKeyEvent, QMouseEvent, QPixmap, QWheelEvent
 from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
@@ -18,7 +18,7 @@ from PySide6.QtWidgets import (
     QPushButton,
 )
 
-from .constants import INTERVAL_CHOICES, SLEEP_TIMER_CHOICES
+from .constants import DONATE_URL, INTERVAL_CHOICES, SLEEP_TIMER_CHOICES
 from .loader import ImageScanner
 from .settings import Settings
 
@@ -184,6 +184,12 @@ class Slideshow(QMainWindow):
         self.add_folder_btn.clicked.connect(self.add_more_folders)
         layout.addWidget(self.add_folder_btn)
 
+        self.donate_btn = QPushButton("♡ Doner")
+        self.donate_btn.setToolTip("Stott utviklingen av KaiSlideshow")
+        self.donate_btn.setFocusPolicy(Qt.NoFocus)
+        self.donate_btn.clicked.connect(self.open_donate_link)
+        layout.addWidget(self.donate_btn)
+
         self.close_btn = QPushButton("Avslutt")
         self.close_btn.setStyleSheet("background-color: #c0392b; color: white;")
         self.close_btn.setFocusPolicy(Qt.NoFocus)
@@ -254,6 +260,9 @@ class Slideshow(QMainWindow):
         files, _ = QFileDialog.getOpenFileNames(self, "Legg til bilder")
         if files:
             self._start_scan(files, initial=False)
+
+    def open_donate_link(self):
+        QDesktopServices.openUrl(QUrl(DONATE_URL))
 
     def apply_sorting(self):
         current = self.image_list[self.index] if self.image_list and self.index < len(self.image_list) else None
