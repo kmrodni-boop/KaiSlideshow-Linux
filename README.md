@@ -1,42 +1,42 @@
 # KaiSlideshow-Linux
 
-En lettvekts fullskjerm lysbildeviser for Linux, skrevet i Python med PySide6 (Qt6).
-Systerapp til [KaiSlideshow-Android](https://github.com/kmrodni-boop/KaiSlideshow-Android),
-med samme filosofi: gjor én ting bra – vis bildene dine som en lysbildefremvisning,
-uten unodvendig kompleksitet.
+A lightweight fullscreen image slideshow viewer for Linux, written in Python with PySide6 (Qt6).
+Sister app to [KaiSlideshow-Android](https://github.com/kmrodni-boop/KaiSlideshow-Android),
+built with the same philosophy: do one thing well — show your photos as a
+slideshow, without unnecessary complexity.
 
-## Funksjoner
+## Features
 
-- **Fullskjerm lysbildefremvisning** med konfigurerbart intervall (2–120 sek)
-- **Tilfeldig eller alfabetisk** rekkefolge
-- **Uttoning (fade)** mellom bilder, kan sla av/pa
-- **Sovetimer** som avslutter fremvisningen etter valgt tid
-- **Zoom og panorering** med musehjul/klikk-og-dra nar fremvisningen er pauset
-- **EXIF-riktig rotasjon** – bilder fra mobil/kamera vises riktig vei
-- **Bakgrunnsinnlasting** – store mapper skanner uten a fryse grensesnittet
-- **Legg til flere bilder/mapper** underveis, uten a starte pa nytt
-- **Nylige mapper** huskes mellom okter
-- **Info-linje** med bildenummer og filnavn
-- Robust mot ulesbare/korrupte filer – de hoppes automatisk over
+- **Fullscreen slideshow** with configurable interval (2–120 sec)
+- **Shuffle or alphabetical** order
+- **Fade transitions** between images, can be toggled on/off
+- **Sleep timer** that ends the slideshow after a chosen time
+- **Zoom and pan** with the mouse wheel/click-and-drag while paused
+- **EXIF-aware rotation** — photos from phones/cameras display the right way up
+- **Background scanning** — large folders load without freezing the UI
+- **Add more images/folders** on the fly, without restarting
+- **Recent folders** remembered between sessions
+- **Info bar** showing image number and filename
+- Resilient to unreadable/corrupt files — they're skipped automatically
 
-### Tastatur og mus
+### Keyboard and mouse
 
-| Handling | Effekt |
+| Action | Effect |
 |---|---|
-| `Mellomrom` | Pause / fortsett |
-| `→` / `Enter` | Neste bilde |
-| `←` | Forrige bilde |
-| `Esc` | Avslutt |
-| `F` / `F11` | Veksle fullskjerm |
-| Musehjul (pause) | Zoom inn/ut |
-| Klikk + dra (pause, zoomet) | Panorer |
-| `+` / `-` / `0` (pause) | Zoom inn / ut / nullstill |
-| Beveg musen | Vis kontrollpanel og markor |
+| `Space` | Pause / resume |
+| `→` / `Enter` | Next image |
+| `←` | Previous image |
+| `Esc` | Quit |
+| `F` / `F11` | Toggle fullscreen |
+| Mouse wheel (paused) | Zoom in/out |
+| Click + drag (paused, zoomed) | Pan |
+| `+` / `-` / `0` (paused) | Zoom in / out / reset |
+| Move mouse | Show control bar and cursor |
 
-Kontrollpanelet overst (vises nar du beveger musen) har intervall, tilfeldig,
-uttoning, sovetimer, forrige/neste, "Legg til bilder", "Legg til mapper" og "Avslutt".
+The control bar at the top (shown when you move the mouse) has the interval,
+shuffle, fade, sleep timer, previous/next, "Add images", "Add folders" and "Quit".
 
-## Installasjon
+## Installation
 
 ```bash
 git clone https://github.com/kmrodni-boop/KaiSlideshow-Linux.git
@@ -44,74 +44,75 @@ cd KaiSlideshow-Linux
 bash install.sh
 ```
 
-(Hvis skriptet er kjorbart hos deg kan du ogsa bruke `./install.sh` direkte;
-kjor evt. `chmod +x install.sh uninstall.sh` forst.)
+(If the script is executable on your system you can also run `./install.sh`
+directly; run `chmod +x install.sh uninstall.sh` first if needed.)
 
-`install.sh` gjor folgende, kun for din brukerkonto (ingenting installeres
-system-bredt, ingen filer utenfor `$HOME` rores):
+`install.sh` does the following, for your user account only (nothing is
+installed system-wide, no files outside `$HOME` are touched):
 
-1. Sjekker at `python3` og `venv`-modulen finnes. Mangler den, foreslas riktig
-   pakke for din distro (apt/dnf/pacman/zypper) og du blir spurt for noe
-   installeres.
-2. Oppretter et isolert virtuelt miljo i `~/.local/share/kaislideshow/venv`
-   og installerer `PySide6` og appen der – rorer ikke systemets Python.
-3. Legger en `kaislideshow`-kommando i `~/.local/bin` (og tilbyr a legge
-   denne til i `PATH` hvis den mangler).
-4. Installerer `.desktop`-fil og ikon slik at KaiSlideshow dukker opp i
-   programmenyen og i "Apne med"-menyen for bilder/mapper i alle
-   XDG-kompatible filbehandlere (Nautilus/GNOME Files, Dolphin, Thunar,
+1. Checks that `python3` and the `venv` module are available. If missing,
+   it suggests the right package for your distro (apt/dnf/pacman/zypper)
+   and asks before installing anything.
+2. Creates an isolated virtual environment in
+   `~/.local/share/kaislideshow/venv` and installs `PySide6` and the app
+   there — your system Python is untouched.
+3. Adds a `kaislideshow` command to `~/.local/bin` (and offers to add it
+   to `PATH` if it's missing).
+4. Installs the `.desktop` entry and icon so KaiSlideshow shows up in the
+   application menu and in the "Open with" menu for images/folders in all
+   XDG-compliant file managers (Nautilus/GNOME Files, Dolphin, Thunar,
    PCManFM, COSMIC Files, ...).
-5. Installerer en **egen "Start KaiSlideshow"-handling for Nemo** som dukker
-   rett opp nar du hoyreklikker en eller flere valgte bilder/mapper – ikke
-   gjemt under "Apne med".
-6. Installerer et hoyreklikk-skript for Nautilus (GNOME Files) under
-   Scripts-undermenyen.
+5. Installs a **dedicated "Start KaiSlideshow" action for Nemo** that
+   appears directly in the right-click menu for one or more selected
+   images/folders — not tucked away under "Open with".
+6. Installs a right-click script for Nautilus (GNOME Files) under the
+   Scripts submenu.
 
-Kjor `bash install.sh -y` for a svare ja pa alle sporsmal automatisk (nyttig i
-skript/CI).
+Run `bash install.sh -y` to answer yes to all prompts automatically
+(useful for scripts/CI).
 
-Fjern alt igjen med:
+Remove everything again with:
 
 ```bash
 bash uninstall.sh
 ```
 
-## Hoyreklikk-integrasjon per filbehandler
+## Right-click integration per file manager
 
-| Filbehandler | Hvordan det vises |
+| File manager | How it shows up |
 |---|---|
-| **Nemo** (Cinnamon/Linux Mint) | Egen linje **"Start KaiSlideshow"** direkte i hoyreklikk-menyen, for én eller flere valgte bilder/mapper |
-| **Nautilus** (GNOME Files) | Hoyreklikk → **Scripts** → "Start KaiSlideshow" |
-| **COSMIC Files** | Hoyreklikk → **Apne med** → KaiSlideshow. COSMIC Files stotter foreløpig ikke egendefinerte handlinger slik Nemo gjor ([pop-os/cosmic-files#1445](https://github.com/pop-os/cosmic-files/issues/1445) er apen); nar den funksjonen lander oppstrom kan et eget script legges til her pa samme mate som for Nautilus |
-| Dolphin, Thunar, PCManFM, m.fl. | Hoyreklikk → **Apne med** → KaiSlideshow (via standard `.desktop`-registrering) |
+| **Nemo** (Cinnamon/Linux Mint) | Dedicated **"Start KaiSlideshow"** entry directly in the right-click menu, for one or more selected images/folders |
+| **Nautilus** (GNOME Files) | Right-click → **Scripts** → "Start KaiSlideshow" |
+| **COSMIC Files** | Right-click → **Open With** → KaiSlideshow. COSMIC Files doesn't yet support custom right-click actions the way Nemo does ([pop-os/cosmic-files#1445](https://github.com/pop-os/cosmic-files/issues/1445) is still open); once that feature lands upstream, a dedicated script can be added here the same way as for Nautilus |
+| Dolphin, Thunar, PCManFM, etc. | Right-click → **Open With** → KaiSlideshow (via standard `.desktop` registration) |
 
-I alle tilfeller kan du velge **flere bilder og/eller mapper samtidig** –
-KaiSlideshow slar dem sammen til én fremvisning.
+In every case you can select **multiple images and/or folders at once** —
+KaiSlideshow merges them into a single slideshow.
 
-## Manuell bruk
+## Manual usage
 
 ```bash
-kaislideshow                       # sporsmalsdialog for a velge mapper
-kaislideshow ~/Bilder/Sommerferie  # start direkte med en mappe
-kaislideshow bilde1.jpg bilde2.png ~/Bilder/Ferie  # blanding av filer og mapper
+kaislideshow                          # prompts you to pick folders
+kaislideshow ~/Pictures/Summer2025    # start directly with a folder
+kaislideshow photo1.jpg photo2.png ~/Pictures/Trip  # mix of files and folders
 ```
 
-## Innstillinger
+## Settings
 
-Lagres i `~/.config/kaislideshow/settings.json` (intervall, tilfeldig,
-uttoning, sovetimer, nylige mapper). Migreres automatisk fra den gamle
-`~/.slideshow_settings.json`-plasseringen brukt av prototypen, hvis den finnes.
+Stored in `~/.config/kaislideshow/settings.json` (interval, shuffle, fade,
+sleep timer, recent folders). Automatically migrated from the old
+`~/.slideshow_settings.json` location used by the original prototype, if present.
 
-## Prosjektstruktur
+## Project structure
 
 ```
 KaiSlideshow-Linux/
 ├── kaislideshow/
-│   ├── __main__.py     # Inngangspunkt / argumenthandtering
-│   ├── window.py        # Hovedvindu: fremvisning, UI, zoom/pan, uttoning
-│   ├── loader.py         # Bakgrunnstrad som skanner mapper/filer
-│   ├── settings.py       # Innstillinger (XDG-config, nylige mapper)
-│   └── constants.py      # Delte konstanter
+│   ├── __main__.py     # Entry point / argument handling
+│   ├── window.py        # Main window: slideshow, UI, zoom/pan, fade
+│   ├── loader.py         # Background thread that scans folders/files
+│   ├── settings.py       # Settings (XDG config, recent folders)
+│   └── constants.py      # Shared constants
 ├── packaging/
 │   ├── kaislideshow.desktop
 │   ├── icons/kaislideshow.svg
@@ -122,7 +123,7 @@ KaiSlideshow-Linux/
 └── requirements.txt
 ```
 
-## Utvikling
+## Development
 
 ```bash
 python3 -m venv .venv
@@ -131,11 +132,13 @@ pip install -e .
 python -m kaislideshow
 ```
 
-## Avhengigheter
+## Dependencies
 
 - Python 3.9+
-- [PySide6](https://pypi.org/project/PySide6/) (Qt6-bindinger)
+- [PySide6](https://pypi.org/project/PySide6/) (Qt6 bindings)
 
-## Lisens
+## License
 
-MIT License – se [LICENSE](LICENSE).
+GNU General Public License v3.0 (GPLv3) — see [LICENSE](LICENSE). Anyone who
+redistributes this app or a modified version of it must also make that
+version's source available under GPLv3.
