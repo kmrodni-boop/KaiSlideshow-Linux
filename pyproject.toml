@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kaislideshow"
+version = "1.0.0"
+description = "Fullscreen image slideshow viewer for Linux"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+dependencies = [
+    "PySide6>=6.5",
+]
+
+[project.scripts]
+kaislideshow = "kaislideshow.__main__:main"
+
+[tool.setuptools]
+packages = ["kaislideshow"]

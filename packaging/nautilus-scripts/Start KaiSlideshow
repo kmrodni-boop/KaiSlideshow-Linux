@@ -1,0 +1,17 @@
+#!/bin/bash
+# Nautilus (GNOME Files) script: right-click selected images/folders -> Scripts -> "Start KaiSlideshow".
+# Nautilus passes the selection via NAUTILUS_SCRIPT_SELECTED_FILE_PATHS (newline separated), not argv.
+set -u
+
+mapfile -t files <<< "${NAUTILUS_SCRIPT_SELECTED_FILE_PATHS:-}"
+
+args=()
+for f in "${files[@]}"; do
+    [ -n "$f" ] && args+=("$f")
+done
+
+if [ "${#args[@]}" -eq 0 ]; then
+    kaislideshow
+else
+    kaislideshow "${args[@]}"
+fi

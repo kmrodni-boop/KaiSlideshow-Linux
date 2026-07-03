@@ -1,0 +1,8 @@
+[Nemo Action]
+Name=Start KaiSlideshow
+Comment=Vis valgte bilder/mapper som lysbildefremvisning
+Exec=kaislideshow %F
+Icon-Name=kaislideshow
+Selection=notnone
+Extensions=jpg;jpeg;png;webp;bmp;gif;tif;tiff;dir;
+Quote=double
