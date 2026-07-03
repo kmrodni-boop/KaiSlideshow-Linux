@@ -41,8 +41,11 @@ uttoning, sovetimer, forrige/neste, "Legg til bilder", "Legg til mapper" og "Avs
 ```bash
 git clone https://github.com/kmrodni-boop/KaiSlideshow-Linux.git
 cd KaiSlideshow-Linux
-./install.sh
+bash install.sh
 ```
+
+(Hvis skriptet er kjorbart hos deg kan du ogsa bruke `./install.sh` direkte;
+kjor evt. `chmod +x install.sh uninstall.sh` forst.)
 
 `install.sh` gjor folgende, kun for din brukerkonto (ingenting installeres
 system-bredt, ingen filer utenfor `$HOME` rores):
@@ -64,13 +67,13 @@ system-bredt, ingen filer utenfor `$HOME` rores):
 6. Installerer et hoyreklikk-skript for Nautilus (GNOME Files) under
    Scripts-undermenyen.
 
-Kjor `./install.sh -y` for a svare ja pa alle sporsmal automatisk (nyttig i
+Kjor `bash install.sh -y` for a svare ja pa alle sporsmal automatisk (nyttig i
 skript/CI).
 
 Fjern alt igjen med:
 
 ```bash
-./uninstall.sh
+bash uninstall.sh
 ```
 
 ## Hoyreklikk-integrasjon per filbehandler
