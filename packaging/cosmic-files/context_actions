@@ -1,0 +1,8 @@
+[
+    (
+        name: "Start KaiSlideshow",
+        confirm: false,
+        selection: Any,
+        steps: ["kaislideshow %F"],
+    ),
+]

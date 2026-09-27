@@ -114,14 +114,34 @@ if command -v nautilus >/dev/null 2>&1; then
     echo "Installed the Nautilus script: right-click -> Scripts -> 'Start KaiSlideshow'."
 fi
 
-# --------------------------------------------------------------- COSMIC Files note
-if command -v cosmic-files >/dev/null 2>&1; then
+# --------------------------------------------------------------- COSMIC Files action
+# Since COSMIC Desktop 1.0.10, COSMIC Files reads custom right-click actions
+# from a single shared RON config file (no GUI for it yet, and still
+# undocumented upstream - see pop-os/cosmic-files#2083). Because it's one
+# shared file rather than one file per app like Nemo/Nautilus, we only
+# write it from scratch if it doesn't exist yet; if the user already has
+# one (with their own custom actions), we leave it untouched and print the
+# entry to add by hand instead of risking corrupting it.
+COSMIC_CONFIG_BASE="${XDG_CONFIG_HOME:-$HOME/.config}"
+COSMIC_ACTIONS_DIR="$COSMIC_CONFIG_BASE/cosmic/com.system76.CosmicFiles/v1"
+COSMIC_ACTIONS_FILE="$COSMIC_ACTIONS_DIR/context_actions"
+
+if [ ! -f "$COSMIC_ACTIONS_FILE" ]; then
+    mkdir -p "$COSMIC_ACTIONS_DIR"
+    cp "$REPO_DIR/packaging/cosmic-files/context_actions" "$COSMIC_ACTIONS_FILE"
+    if command -v cosmic-files >/dev/null 2>&1; then
+        echo "Installed a COSMIC Files right-click action: right-click images/folders -> 'Start KaiSlideshow'."
+        echo "(Restart COSMIC Files, e.g. 'killall cosmic-files', for it to appear - it's only read at startup.)"
+    else
+        echo "Installed a COSMIC Files right-click action (COSMIC Files wasn't found now, but the action will be picked up if you install it later)."
+    fi
+elif ! grep -q "KaiSlideshow" "$COSMIC_ACTIONS_FILE" 2>/dev/null; then
     echo
-    echo "Note about COSMIC Files: it doesn't yet support custom right-click"
-    echo "actions (see pop-os/cosmic-files#1445), so KaiSlideshow will show up"
-    echo "under right-click -> 'Open With' -> KaiSlideshow instead of as its"
-    echo "own menu entry. It's there because the .desktop file above"
-    echo "registers KaiSlideshow as a valid opener for images/folders."
+    echo "COSMIC Files already has custom actions configured at:"
+    echo "  $COSMIC_ACTIONS_FILE"
+    echo "To avoid touching your existing entries, add this one to its top-level list yourself"
+    echo "(see $REPO_DIR/packaging/cosmic-files/context_actions):"
+    sed -n '2,7p' "$REPO_DIR/packaging/cosmic-files/context_actions"
 fi
 
 # --------------------------------------------------------------- PATH check

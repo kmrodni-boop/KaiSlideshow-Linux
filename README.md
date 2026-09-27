@@ -67,6 +67,12 @@ installed system-wide, no files outside `$HOME` are touched):
    images/folders — not tucked away under "Open with".
 6. Installs a right-click script for Nautilus (GNOME Files) under the
    Scripts submenu.
+7. Installs a **dedicated "Start KaiSlideshow" action for COSMIC Files**
+   (COSMIC Desktop 1.0.10+), the same way as for Nemo. Since COSMIC Files
+   reads all custom actions from one shared config file rather than one
+   file per app, this is only written from scratch if you don't already
+   have one — if you do, `install.sh` leaves it untouched and prints the
+   entry to add by hand instead of risking corrupting your own actions.
 
 Run `bash install.sh -y` to answer yes to all prompts automatically
 (useful for scripts/CI).
@@ -83,7 +89,7 @@ bash uninstall.sh
 |---|---|
 | **Nemo** (Cinnamon/Linux Mint) | Dedicated **"Start KaiSlideshow"** entry directly in the right-click menu, for one or more selected images/folders |
 | **Nautilus** (GNOME Files) | Right-click → **Scripts** → "Start KaiSlideshow" |
-| **COSMIC Files** | Right-click → **Open With** → KaiSlideshow. COSMIC Files doesn't yet support custom right-click actions the way Nemo does ([pop-os/cosmic-files#1445](https://github.com/pop-os/cosmic-files/issues/1445) is still open); once that feature lands upstream, a dedicated script can be added here the same way as for Nautilus |
+| **COSMIC Files** (COSMIC Desktop 1.0.10+) | Dedicated **"Start KaiSlideshow"** entry directly in the right-click menu, for one or more selected images/folders. Configured via COSMIC Files' `context_actions` file, a still-undocumented feature upstream ([pop-os/cosmic-files#2083](https://github.com/pop-os/cosmic-files/issues/2083)) — restart COSMIC Files (e.g. `killall cosmic-files`) after install for it to appear, since it's only read at startup |
 | Dolphin, Thunar, PCManFM, etc. | Right-click → **Open With** → KaiSlideshow (via standard `.desktop` registration) |
 
 In every case you can select **multiple images and/or folders at once** —
@@ -117,7 +123,8 @@ KaiSlideshow-Linux/
 │   ├── kaislideshow.desktop
 │   ├── icons/kaislideshow.svg
 │   ├── nemo-actions/kaislideshow.nemo_action
-│   └── nautilus-scripts/Start KaiSlideshow
+│   ├── nautilus-scripts/Start KaiSlideshow
+│   └── cosmic-files/context_actions
 ├── install.sh / uninstall.sh
 ├── pyproject.toml
 └── requirements.txt
