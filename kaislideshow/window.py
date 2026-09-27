@@ -95,12 +95,13 @@ class Slideshow(QMainWindow):
         )
         self.info_bar.setFocusPolicy(Qt.NoFocus)
 
-        self.pause_label = QLabel("Ⅱ PAUSE", self)
+        self.pause_label = QLabel("Ⅱ Pause", self)
         self.pause_label.setStyleSheet(
-            "background-color: rgba(20, 20, 20, 200); color: white; font-size: 50px;"
-            " font-weight: bold; border-radius: 25px; padding: 40px; border: 1px solid #444;"
+            "background-color: rgba(20, 20, 20, 200); color: white; font-size: 16px;"
+            " font-weight: bold; border-radius: 12px; padding: 10px 18px; border: 1px solid #444;"
         )
         self.pause_label.setAlignment(Qt.AlignCenter)
+        self.pause_label.setFocusPolicy(Qt.NoFocus)
         self.pause_label.hide()
 
         self._build_menu_bar()
@@ -349,9 +350,10 @@ class Slideshow(QMainWindow):
             self.menu_bar.move((self.width() - menu_width) // 2, 40)
         if hasattr(self, "pause_label"):
             self.pause_label.adjustSize()
+            margin = 24
             self.pause_label.move(
-                (self.width() - self.pause_label.width()) // 2,
-                (self.height() - self.pause_label.height()) // 2,
+                self.width() - self.pause_label.width() - margin,
+                self.height() - self.pause_label.height() - margin,
             )
         if hasattr(self, "status_label"):
             self._center_status_label()
