@@ -9,13 +9,17 @@ from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
     QFileDialog,
+    QFormLayout,
     QFrame,
     QGraphicsOpacityEffect,
     QHBoxLayout,
     QLabel,
     QListView,
     QMainWindow,
+    QMenu,
     QPushButton,
+    QToolButton,
+    QWidgetAction,
 )
 
 from .constants import DONATE_URL, INTERVAL_CHOICES, SLEEP_TIMER_CHOICES
@@ -103,7 +107,6 @@ class Slideshow(QMainWindow):
 
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.show_next)
-        self.timer.start(self._interval_ms())
 
         self.mouse_timer = QTimer(self)
         self.mouse_timer.timeout.connect(self.hide_ui)
@@ -115,86 +118,129 @@ class Slideshow(QMainWindow):
 
     def _build_menu_bar(self):
         self.menu_bar = QFrame(self)
-        self.menu_bar.setFixedHeight(80)
+        self.menu_bar.setFixedHeight(64)
         self.menu_bar.setFocusPolicy(Qt.NoFocus)
         self.menu_bar.setStyleSheet(
             """
-            QFrame { background-color: rgba(35, 35, 35, 230); border-radius: 20px; border: 1px solid #555; }
+            QFrame { background-color: rgba(35, 35, 35, 230); border-radius: 16px; border: 1px solid #555; }
             QLabel { color: #eee; font-size: 14px; }
             QComboBox { color: white; background-color: #444; border: 1px solid #666; padding: 5px; border-radius: 8px; }
             QCheckBox { color: white; }
-            QPushButton { color: white; background-color: #444; border: none; padding: 8px 16px; border-radius: 10px; font-weight: bold; }
+            QPushButton, QToolButton {
+                color: white; background-color: #444; border: none;
+                padding: 8px 14px; border-radius: 10px; font-weight: bold; font-size: 17px;
+            }
+            QToolButton::menu-indicator { image: none; }
             """
         )
         self.menu_bar.hide()
 
         layout = QHBoxLayout(self.menu_bar)
-        layout.setContentsMargins(20, 0, 20, 0)
-        layout.setSpacing(10)
+        layout.setContentsMargins(16, 0, 16, 0)
+        layout.setSpacing(8)
 
-        layout.addWidget(QLabel("Intervall:"))
-        self.timer_combo = QComboBox()
-        self.timer_combo.addItems(INTERVAL_CHOICES)
-        self.timer_combo.setCurrentText(str(self.settings.get("interval", "5")))
-        self.timer_combo.setFocusPolicy(Qt.NoFocus)
-        self.timer_combo.currentTextChanged.connect(self.update_interval)
-        layout.addWidget(self.timer_combo)
-
-        self.shuffle_check = QCheckBox("Tilfeldig")
-        self.shuffle_check.setChecked(self.settings.get("shuffle", True))
-        self.shuffle_check.setFocusPolicy(Qt.NoFocus)
-        self.shuffle_check.stateChanged.connect(self.toggle_shuffle)
-        layout.addWidget(self.shuffle_check)
-
-        self.fade_check = QCheckBox("Uttoning")
-        self.fade_check.setChecked(self.settings.get("fade", True))
-        self.fade_check.setFocusPolicy(Qt.NoFocus)
-        self.fade_check.stateChanged.connect(self.toggle_fade)
-        layout.addWidget(self.fade_check)
-
-        layout.addWidget(QLabel("Sovetimer:"))
-        self.sleep_combo = QComboBox()
-        self.sleep_combo.addItems(list(SLEEP_TIMER_CHOICES.keys()))
-        self.sleep_combo.setCurrentText(self.settings.get("sleep_timer", "Av"))
-        self.sleep_combo.setFocusPolicy(Qt.NoFocus)
-        self.sleep_combo.currentTextChanged.connect(self.update_sleep_timer)
-        layout.addWidget(self.sleep_combo)
+        self.settings_btn = QToolButton()
+        self.settings_btn.setText("⚙")
+        self.settings_btn.setToolTip("Innstillinger")
+        self.settings_btn.setFocusPolicy(Qt.NoFocus)
+        self.settings_btn.setPopupMode(QToolButton.InstantPopup)
+        self.settings_btn.setMenu(self._build_settings_menu())
+        layout.addWidget(self.settings_btn)
 
         layout.addStretch()
 
-        self.prev_btn = QPushButton("◀ Forrige")
+        self.prev_btn = QPushButton("◀")
+        self.prev_btn.setToolTip("Forrige bilde")
         self.prev_btn.setFocusPolicy(Qt.NoFocus)
         self.prev_btn.clicked.connect(self.show_previous)
         layout.addWidget(self.prev_btn)
 
-        self.next_btn = QPushButton("Neste ▶")
+        self.next_btn = QPushButton("▶")
+        self.next_btn.setToolTip("Neste bilde")
         self.next_btn.setFocusPolicy(Qt.NoFocus)
         self.next_btn.clicked.connect(self.show_next)
         layout.addWidget(self.next_btn)
 
-        self.add_files_btn = QPushButton("Legg til bilder")
+        self.add_files_btn = QPushButton("🖼")
+        self.add_files_btn.setToolTip("Legg til bilder")
         self.add_files_btn.setStyleSheet("background-color: #2980b9; color: white;")
         self.add_files_btn.setFocusPolicy(Qt.NoFocus)
         self.add_files_btn.clicked.connect(self.add_more_files)
         layout.addWidget(self.add_files_btn)
 
-        self.add_folder_btn = QPushButton("Legg til mapper")
+        self.add_folder_btn = QPushButton("📁")
+        self.add_folder_btn.setToolTip("Legg til mapper")
         self.add_folder_btn.setStyleSheet("background-color: #2980b9; color: white;")
         self.add_folder_btn.setFocusPolicy(Qt.NoFocus)
         self.add_folder_btn.clicked.connect(self.add_more_folders)
         layout.addWidget(self.add_folder_btn)
 
-        self.donate_btn = QPushButton("♡ Doner")
-        self.donate_btn.setToolTip("Stott utviklingen av KaiSlideshow")
+        self.donate_btn = QPushButton("♡")
+        self.donate_btn.setToolTip("Støtt utviklingen av KaiSlideshow")
         self.donate_btn.setFocusPolicy(Qt.NoFocus)
         self.donate_btn.clicked.connect(self.open_donate_link)
         layout.addWidget(self.donate_btn)
 
-        self.close_btn = QPushButton("Avslutt")
+        self.close_btn = QPushButton("✕")
+        self.close_btn.setToolTip("Avslutt")
         self.close_btn.setStyleSheet("background-color: #c0392b; color: white;")
         self.close_btn.setFocusPolicy(Qt.NoFocus)
         self.close_btn.clicked.connect(self.close)
         layout.addWidget(self.close_btn)
+
+    def _build_settings_menu(self):
+        menu = QMenu(self)
+        menu.setStyleSheet(
+            """
+            QMenu { background-color: rgba(35, 35, 35, 240); border: 1px solid #555; border-radius: 12px; padding: 10px; }
+            QLabel { color: #eee; font-size: 14px; }
+            QComboBox { color: white; background-color: #444; border: 1px solid #666; padding: 5px; border-radius: 8px; }
+            QCheckBox { color: white; }
+            """
+        )
+
+        panel = QFrame()
+        form = QFormLayout(panel)
+        form.setSpacing(10)
+
+        label_style = "color: #eee;"
+
+        self.timer_combo = QComboBox()
+        self.timer_combo.addItems(INTERVAL_CHOICES)
+        self.timer_combo.setCurrentText(str(self.settings.get("interval", "5")))
+        self.timer_combo.setFocusPolicy(Qt.NoFocus)
+        self.timer_combo.currentTextChanged.connect(self.update_interval)
+        interval_label = QLabel("Intervall:")
+        interval_label.setStyleSheet(label_style)
+        form.addRow(interval_label, self.timer_combo)
+
+        self.sleep_combo = QComboBox()
+        self.sleep_combo.addItems(list(SLEEP_TIMER_CHOICES.keys()))
+        self.sleep_combo.setCurrentText(self.settings.get("sleep_timer", "Av"))
+        self.sleep_combo.setFocusPolicy(Qt.NoFocus)
+        self.sleep_combo.currentTextChanged.connect(self.update_sleep_timer)
+        sleep_label = QLabel("Sovetimer:")
+        sleep_label.setStyleSheet(label_style)
+        form.addRow(sleep_label, self.sleep_combo)
+
+        self.shuffle_check = QCheckBox("Tilfeldig rekkefølge")
+        self.shuffle_check.setChecked(self.settings.get("shuffle", True))
+        self.shuffle_check.setFocusPolicy(Qt.NoFocus)
+        self.shuffle_check.setStyleSheet(label_style)
+        self.shuffle_check.stateChanged.connect(self.toggle_shuffle)
+        form.addRow(self.shuffle_check)
+
+        self.fade_check = QCheckBox("Uttoning")
+        self.fade_check.setChecked(self.settings.get("fade", True))
+        self.fade_check.setFocusPolicy(Qt.NoFocus)
+        self.fade_check.setStyleSheet(label_style)
+        self.fade_check.stateChanged.connect(self.toggle_fade)
+        form.addRow(self.fade_check)
+
+        action = QWidgetAction(menu)
+        action.setDefaultWidget(panel)
+        menu.addAction(action)
+        return menu
 
     # ------------------------------------------------------------- dialogs
 
@@ -248,6 +294,8 @@ class Slideshow(QMainWindow):
 
         self.apply_sorting()
         self.show_next()
+        if replace and not self.timer.isActive():
+            self.timer.start(self._interval_ms())
 
     # --------------------------------------------------------------- misc
 
