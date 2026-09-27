@@ -132,6 +132,8 @@ class Slideshow(QMainWindow):
                 color: white; background-color: #444; border: none;
                 border-radius: 10px; font-weight: bold; font-size: 17px;
             }
+            QPushButton:hover, QToolButton:hover { background-color: #5a5a5a; }
+            QPushButton:pressed, QToolButton:pressed { background-color: #333; }
             QToolButton::menu-indicator { image: none; }
             """
         )
@@ -168,7 +170,12 @@ class Slideshow(QMainWindow):
 
         self.add_files_btn = QPushButton("🖼")
         self.add_files_btn.setToolTip("Legg til bilder")
-        self.add_files_btn.setStyleSheet("background-color: #2980b9; color: white;")
+        self.add_files_btn.setStyleSheet(
+            "QPushButton { background-color: #2980b9; color: white; border: none;"
+            " border-radius: 10px; font-weight: bold; }"
+            "QPushButton:hover { background-color: #3491cf; }"
+            "QPushButton:pressed { background-color: #1f6a99; }"
+        )
         self.add_files_btn.setFocusPolicy(Qt.NoFocus)
         self.add_files_btn.setFixedSize(ICON_BTN_SIZE, ICON_BTN_SIZE)
         self.add_files_btn.clicked.connect(self.add_more_files)
@@ -176,7 +183,12 @@ class Slideshow(QMainWindow):
 
         self.add_folder_btn = QPushButton("📁")
         self.add_folder_btn.setToolTip("Legg til mapper")
-        self.add_folder_btn.setStyleSheet("background-color: #2980b9; color: white;")
+        self.add_folder_btn.setStyleSheet(
+            "QPushButton { background-color: #2980b9; color: white; border: none;"
+            " border-radius: 10px; font-weight: bold; }"
+            "QPushButton:hover { background-color: #3491cf; }"
+            "QPushButton:pressed { background-color: #1f6a99; }"
+        )
         self.add_folder_btn.setFocusPolicy(Qt.NoFocus)
         self.add_folder_btn.setFixedSize(ICON_BTN_SIZE, ICON_BTN_SIZE)
         self.add_folder_btn.clicked.connect(self.add_more_folders)
@@ -191,7 +203,12 @@ class Slideshow(QMainWindow):
 
         self.close_btn = QPushButton("✕")
         self.close_btn.setToolTip("Avslutt")
-        self.close_btn.setStyleSheet("background-color: #c0392b; color: white;")
+        self.close_btn.setStyleSheet(
+            "QPushButton { background-color: #c0392b; color: white; border: none;"
+            " border-radius: 10px; font-weight: bold; }"
+            "QPushButton:hover { background-color: #d6503f; }"
+            "QPushButton:pressed { background-color: #942d21; }"
+        )
         self.close_btn.setFocusPolicy(Qt.NoFocus)
         self.close_btn.setFixedSize(ICON_BTN_SIZE, ICON_BTN_SIZE)
         self.close_btn.clicked.connect(self.close)
@@ -334,6 +351,8 @@ class Slideshow(QMainWindow):
         self.index = self.image_list.index(current) if current in self.image_list else 0
 
     def hide_ui(self):
+        if self.menu_bar.underMouse():
+            return
         self.menu_bar.hide()
         self.setCursor(Qt.BlankCursor)
 
