@@ -30,6 +30,7 @@ MIN_ZOOM = 1.0
 MAX_ZOOM = 4.0
 ZOOM_STEP = 0.15
 FADE_MS = 180
+ICON_BTN_SIZE = 44
 
 
 def load_pixmap(path):
@@ -129,7 +130,7 @@ class Slideshow(QMainWindow):
             QCheckBox { color: white; }
             QPushButton, QToolButton {
                 color: white; background-color: #444; border: none;
-                padding: 8px 14px; border-radius: 10px; font-weight: bold; font-size: 17px;
+                border-radius: 10px; font-weight: bold; font-size: 17px;
             }
             QToolButton::menu-indicator { image: none; }
             """
@@ -144,6 +145,7 @@ class Slideshow(QMainWindow):
         self.settings_btn.setText("⚙")
         self.settings_btn.setToolTip("Innstillinger")
         self.settings_btn.setFocusPolicy(Qt.NoFocus)
+        self.settings_btn.setFixedSize(ICON_BTN_SIZE, ICON_BTN_SIZE)
         self.settings_btn.setPopupMode(QToolButton.InstantPopup)
         self.settings_btn.setMenu(self._build_settings_menu())
         layout.addWidget(self.settings_btn)
@@ -153,12 +155,14 @@ class Slideshow(QMainWindow):
         self.prev_btn = QPushButton("◀")
         self.prev_btn.setToolTip("Forrige bilde")
         self.prev_btn.setFocusPolicy(Qt.NoFocus)
+        self.prev_btn.setFixedSize(ICON_BTN_SIZE, ICON_BTN_SIZE)
         self.prev_btn.clicked.connect(self.show_previous)
         layout.addWidget(self.prev_btn)
 
         self.next_btn = QPushButton("▶")
         self.next_btn.setToolTip("Neste bilde")
         self.next_btn.setFocusPolicy(Qt.NoFocus)
+        self.next_btn.setFixedSize(ICON_BTN_SIZE, ICON_BTN_SIZE)
         self.next_btn.clicked.connect(self.show_next)
         layout.addWidget(self.next_btn)
 
@@ -166,6 +170,7 @@ class Slideshow(QMainWindow):
         self.add_files_btn.setToolTip("Legg til bilder")
         self.add_files_btn.setStyleSheet("background-color: #2980b9; color: white;")
         self.add_files_btn.setFocusPolicy(Qt.NoFocus)
+        self.add_files_btn.setFixedSize(ICON_BTN_SIZE, ICON_BTN_SIZE)
         self.add_files_btn.clicked.connect(self.add_more_files)
         layout.addWidget(self.add_files_btn)
 
@@ -173,12 +178,14 @@ class Slideshow(QMainWindow):
         self.add_folder_btn.setToolTip("Legg til mapper")
         self.add_folder_btn.setStyleSheet("background-color: #2980b9; color: white;")
         self.add_folder_btn.setFocusPolicy(Qt.NoFocus)
+        self.add_folder_btn.setFixedSize(ICON_BTN_SIZE, ICON_BTN_SIZE)
         self.add_folder_btn.clicked.connect(self.add_more_folders)
         layout.addWidget(self.add_folder_btn)
 
         self.donate_btn = QPushButton("♡")
         self.donate_btn.setToolTip("Støtt utviklingen av KaiSlideshow")
         self.donate_btn.setFocusPolicy(Qt.NoFocus)
+        self.donate_btn.setFixedSize(ICON_BTN_SIZE, ICON_BTN_SIZE)
         self.donate_btn.clicked.connect(self.open_donate_link)
         layout.addWidget(self.donate_btn)
 
@@ -186,6 +193,7 @@ class Slideshow(QMainWindow):
         self.close_btn.setToolTip("Avslutt")
         self.close_btn.setStyleSheet("background-color: #c0392b; color: white;")
         self.close_btn.setFocusPolicy(Qt.NoFocus)
+        self.close_btn.setFixedSize(ICON_BTN_SIZE, ICON_BTN_SIZE)
         self.close_btn.clicked.connect(self.close)
         layout.addWidget(self.close_btn)
 
