@@ -29,6 +29,10 @@ class Settings:
                 self.data.update(loaded)
             except (OSError, json.JSONDecodeError):
                 pass
+        # Migrate the old Norwegian sleep-timer label from settings saved
+        # before the UI switched to English.
+        if self.data.get("sleep_timer") == "Av":
+            self.data["sleep_timer"] = "Off"
 
     def save(self):
         os.makedirs(CONFIG_DIR, exist_ok=True)

@@ -1,6 +1,6 @@
 [Nemo Action]
 Name=Start KaiSlideshow
-Comment=Vis valgte bilder/mapper som lysbildefremvisning
+Comment=Show selected images/folders as a slideshow
 Exec=kaislideshow %F
 Icon-Name=kaislideshow
 Selection=notnone

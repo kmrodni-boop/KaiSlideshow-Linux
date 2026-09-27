@@ -16,4 +16,4 @@ rm -f "$DATA_DIR/nautilus/scripts/Start KaiSlideshow"
 command -v update-desktop-database >/dev/null 2>&1 && update-desktop-database "$DATA_DIR/applications" >/dev/null 2>&1
 command -v gtk-update-icon-cache >/dev/null 2>&1 && gtk-update-icon-cache -f -t "$DATA_DIR/icons/hicolor" >/dev/null 2>&1
 
-echo "KaiSlideshow er avinstallert. Innstillingsfilen i ~/.config/kaislideshow er beholdt (slett manuelt om onskelig)."
+echo "KaiSlideshow has been uninstalled. The settings file in ~/.config/kaislideshow was kept (delete it manually if you want)."
