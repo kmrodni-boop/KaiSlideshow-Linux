@@ -126,7 +126,7 @@ class Slideshow(QMainWindow):
             """
             QFrame { background-color: rgba(35, 35, 35, 230); border-radius: 16px; border: 1px solid #555; }
             QLabel { color: #eee; font-size: 14px; }
-            QComboBox { color: white; background-color: #444; border: 1px solid #666; padding: 5px; border-radius: 8px; }
+            QComboBox { color: white; background-color: #444; border: 1px solid #666; padding: 5px; border-radius: 0px; }
             QCheckBox { color: white; }
             QPushButton, QToolButton {
                 color: white; background-color: #444; border: none;
@@ -220,7 +220,7 @@ class Slideshow(QMainWindow):
             """
             QMenu { background-color: rgba(35, 35, 35, 240); border: 1px solid #555; border-radius: 12px; padding: 10px; }
             QLabel { color: #eee; font-size: 14px; }
-            QComboBox { color: white; background-color: #444; border: 1px solid #666; padding: 5px; border-radius: 8px; }
+            QComboBox { color: white; background-color: #444; border: 1px solid #666; padding: 5px; border-radius: 0px; }
             QCheckBox { color: white; }
             """
         )
