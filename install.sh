@@ -73,6 +73,10 @@ python3 -m venv "$VENV_DIR"
 "$VENV_DIR/bin/pip" install --upgrade pip wheel >/dev/null
 echo "Installerer KaiSlideshow og avhengigheter (PySide6) ..."
 "$VENV_DIR/bin/pip" install --upgrade "$REPO_DIR"
+# pip ser at "kaislideshow" allerede star med samme versjonsnummer og
+# hopper da over a installere den pa nytt, sjol om kildekoden er endret.
+# Tving frem en fersk installasjon av selve pakken (uten a rore PySide6).
+"$VENV_DIR/bin/pip" install --upgrade --force-reinstall --no-deps "$REPO_DIR"
 
 # --------------------------------------------------------------- launcher
 mkdir -p "$BIN_DIR"
