@@ -85,7 +85,7 @@ class Slideshow(QMainWindow):
         self.fade_anim = QPropertyAnimation(self.opacity_effect, b"opacity", self)
         self.setCentralWidget(self.label)
 
-        self.status_label = QLabel("Laster bilder…", self)
+        self.status_label = QLabel("Loading images…", self)
         self.status_label.setStyleSheet("color: #ddd; font-size: 22px;")
         self.status_label.setAlignment(Qt.AlignCenter)
 
@@ -116,7 +116,7 @@ class Slideshow(QMainWindow):
         self.sleep_timer = QTimer(self)
         self.sleep_timer.setSingleShot(True)
         self.sleep_timer.timeout.connect(self.close)
-        self._apply_sleep_timer(self.settings.get("sleep_timer", "Av"))
+        self._apply_sleep_timer(self.settings.get("sleep_timer", "Off"))
 
     def _build_menu_bar(self):
         self.menu_bar = QFrame(self)
@@ -145,7 +145,7 @@ class Slideshow(QMainWindow):
 
         self.settings_btn = QToolButton()
         self.settings_btn.setText("⚙")
-        self.settings_btn.setToolTip("Innstillinger")
+        self.settings_btn.setToolTip("Settings")
         self.settings_btn.setFocusPolicy(Qt.NoFocus)
         self.settings_btn.setFixedSize(ICON_BTN_SIZE, ICON_BTN_SIZE)
         self.settings_btn.setPopupMode(QToolButton.InstantPopup)
@@ -155,21 +155,21 @@ class Slideshow(QMainWindow):
         layout.addStretch()
 
         self.prev_btn = QPushButton("◀")
-        self.prev_btn.setToolTip("Forrige bilde")
+        self.prev_btn.setToolTip("Previous image")
         self.prev_btn.setFocusPolicy(Qt.NoFocus)
         self.prev_btn.setFixedSize(ICON_BTN_SIZE, ICON_BTN_SIZE)
         self.prev_btn.clicked.connect(self.show_previous)
         layout.addWidget(self.prev_btn)
 
         self.next_btn = QPushButton("▶")
-        self.next_btn.setToolTip("Neste bilde")
+        self.next_btn.setToolTip("Next image")
         self.next_btn.setFocusPolicy(Qt.NoFocus)
         self.next_btn.setFixedSize(ICON_BTN_SIZE, ICON_BTN_SIZE)
         self.next_btn.clicked.connect(self.show_next)
         layout.addWidget(self.next_btn)
 
         self.add_files_btn = QPushButton("🖼")
-        self.add_files_btn.setToolTip("Legg til bilder")
+        self.add_files_btn.setToolTip("Add images")
         self.add_files_btn.setStyleSheet(
             "QPushButton { background-color: #2980b9; color: white; border: none;"
             " border-radius: 10px; font-weight: bold; }"
@@ -182,7 +182,7 @@ class Slideshow(QMainWindow):
         layout.addWidget(self.add_files_btn)
 
         self.add_folder_btn = QPushButton("📁")
-        self.add_folder_btn.setToolTip("Legg til mapper")
+        self.add_folder_btn.setToolTip("Add folders")
         self.add_folder_btn.setStyleSheet(
             "QPushButton { background-color: #2980b9; color: white; border: none;"
             " border-radius: 10px; font-weight: bold; }"
@@ -195,14 +195,14 @@ class Slideshow(QMainWindow):
         layout.addWidget(self.add_folder_btn)
 
         self.donate_btn = QPushButton("♡")
-        self.donate_btn.setToolTip("Støtt utviklingen av KaiSlideshow")
+        self.donate_btn.setToolTip("Support KaiSlideshow's development")
         self.donate_btn.setFocusPolicy(Qt.NoFocus)
         self.donate_btn.setFixedSize(ICON_BTN_SIZE, ICON_BTN_SIZE)
         self.donate_btn.clicked.connect(self.open_donate_link)
         layout.addWidget(self.donate_btn)
 
         self.close_btn = QPushButton("✕")
-        self.close_btn.setToolTip("Avslutt")
+        self.close_btn.setToolTip("Quit")
         self.close_btn.setStyleSheet(
             "QPushButton { background-color: #c0392b; color: white; border: none;"
             " border-radius: 10px; font-weight: bold; }"
@@ -236,27 +236,27 @@ class Slideshow(QMainWindow):
         self.timer_combo.setCurrentText(str(self.settings.get("interval", "5")))
         self.timer_combo.setFocusPolicy(Qt.NoFocus)
         self.timer_combo.currentTextChanged.connect(self.update_interval)
-        interval_label = QLabel("Intervall:")
+        interval_label = QLabel("Interval:")
         interval_label.setStyleSheet(label_style)
         form.addRow(interval_label, self.timer_combo)
 
         self.sleep_combo = QComboBox()
         self.sleep_combo.addItems(list(SLEEP_TIMER_CHOICES.keys()))
-        self.sleep_combo.setCurrentText(self.settings.get("sleep_timer", "Av"))
+        self.sleep_combo.setCurrentText(self.settings.get("sleep_timer", "Off"))
         self.sleep_combo.setFocusPolicy(Qt.NoFocus)
         self.sleep_combo.currentTextChanged.connect(self.update_sleep_timer)
-        sleep_label = QLabel("Sovetimer:")
+        sleep_label = QLabel("Sleep timer:")
         sleep_label.setStyleSheet(label_style)
         form.addRow(sleep_label, self.sleep_combo)
 
-        self.shuffle_check = QCheckBox("Tilfeldig rekkefølge")
+        self.shuffle_check = QCheckBox("Shuffle")
         self.shuffle_check.setChecked(self.settings.get("shuffle", True))
         self.shuffle_check.setFocusPolicy(Qt.NoFocus)
         self.shuffle_check.setStyleSheet(label_style)
         self.shuffle_check.stateChanged.connect(self.toggle_shuffle)
         form.addRow(self.shuffle_check)
 
-        self.fade_check = QCheckBox("Uttoning")
+        self.fade_check = QCheckBox("Fade")
         self.fade_check.setChecked(self.settings.get("fade", True))
         self.fade_check.setFocusPolicy(Qt.NoFocus)
         self.fade_check.setStyleSheet(label_style)
@@ -274,7 +274,7 @@ class Slideshow(QMainWindow):
         """Ask the user for one or more folders. Native dialogs rarely allow
         picking several folders at once, so this uses a non-native dialog with
         multi-selection enabled (works on most Linux desktops)."""
-        dialog = QFileDialog(self, "Velg mapper")
+        dialog = QFileDialog(self, "Select folders")
         dialog.setFileMode(QFileDialog.Directory)
         dialog.setOption(QFileDialog.ShowDirsOnly, True)
         dialog.setOption(QFileDialog.DontUseNativeDialog, True)
@@ -314,7 +314,7 @@ class Slideshow(QMainWindow):
             self.image_list.extend(p for p in found if p not in existing)
 
         if not self.image_list:
-            self.status_label.setText("Ingen bilder funnet i valgte mapper/filer.")
+            self.status_label.setText("No images found in the selected folders/files.")
             self.status_label.show()
             return
 
@@ -331,7 +331,7 @@ class Slideshow(QMainWindow):
             self._start_scan(new_paths, initial=False)
 
     def add_more_files(self):
-        dialog = QFileDialog(self, "Legg til bilder")
+        dialog = QFileDialog(self, "Add images")
         dialog.setFileMode(QFileDialog.ExistingFiles)
         dialog.setOption(QFileDialog.DontUseNativeDialog, True)
         if dialog.exec():
@@ -494,7 +494,7 @@ class Slideshow(QMainWindow):
             self.index %= len(self.image_list)
             attempts -= 1
         self.raw_pixmap = QPixmap()
-        self.status_label.setText("Ingen lesbare bilder igjen.")
+        self.status_label.setText("No readable images left.")
         self.status_label.show()
         return False
 
