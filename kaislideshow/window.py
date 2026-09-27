@@ -306,9 +306,13 @@ class Slideshow(QMainWindow):
             self._start_scan(new_paths, initial=False)
 
     def add_more_files(self):
-        files, _ = QFileDialog.getOpenFileNames(self, "Legg til bilder")
-        if files:
-            self._start_scan(files, initial=False)
+        dialog = QFileDialog(self, "Legg til bilder")
+        dialog.setFileMode(QFileDialog.ExistingFiles)
+        dialog.setOption(QFileDialog.DontUseNativeDialog, True)
+        if dialog.exec():
+            files = dialog.selectedFiles()
+            if files:
+                self._start_scan(files, initial=False)
 
     def open_donate_link(self):
         QDesktopServices.openUrl(QUrl(DONATE_URL))
